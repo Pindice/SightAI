@@ -8,7 +8,7 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants sur v
 
 - python (version X.X.X)
 
-## Installation
+## Installation (docker.file à venir)
 
 1. Clonez ce dépôt sur votre machine en utilisant la commande suivante :
 
