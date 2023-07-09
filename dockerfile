@@ -1,5 +1,5 @@
 # Utilisez une image de base Python
-FROM python:3.8
+FROM python:3.10.11
 
 # Définissez le répertoire de travail dans le conteneur
 WORKDIR /app
@@ -8,7 +8,10 @@ WORKDIR /app
 COPY . /app
 
 # Installez les dépendances du projet
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Installez la bibliothèque libgl1-mesa-glx
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
 
 # Exposez le port utilisé par Streamlit
 EXPOSE 8501
