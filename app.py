@@ -28,12 +28,19 @@ def detect_objects(image):
     model = YOLO('./models/best.pt')
 
     # Effectuez la détection d'objets sur l'image
-    results = model(image)
+    results = model(image, save=True, project="predicted")
 
-    # Récupérez les résultats de la détection
-    predictions = results.pandas().xyxy[0]
+        # Process results list
+    for result in results:
+        boxes = result.boxes  # Boxes object for bbox outputs
+        masks = result.masks  # Masks object for segmentation masks outputs
+        keypoints = result.keypoints  # Keypoints object for pose outputs
+        probs = result.probs  # Class probabilities for classification outputs
 
-    return predictions
+    st.write(results)
+
+
+    return results
 
 def view_form():
     st.title(f"VIEW FORM")
@@ -50,26 +57,26 @@ def view_form():
 
             # Vérifiez si le bouton "Détecter" est cliqué
             if st.button("Détecter"):
-                # Convertir l'image en tableau numpy
-                image_array = np.array(image)
+                # # Convertir l'image en tableau numpy
+                # image_array = np.array(image)
 
                 # Effectuez la détection d'objets sur l'image
-                predictions = detect_objects(image_array)
+                predictions = detect_objects(image)
 
-                # Dessinez les bounding boxes et les annotations sur l'image
-                for _, row in predictions.iterrows():
-                    x1, y1, x2, y2, class_name, confidence = row
-                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+    #             # Dessinez les bounding boxes et les annotations sur l'image
+    #             for _, row in predictions.iterrows():
+    #                 x1, y1, x2, y2, class_name, confidence = row
+    #                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-                    # Dessinez la bounding box
-                    cv2.rectangle(image_array, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    #                 # Dessinez la bounding box
+    #                 cv2.rectangle(image_array, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-                    # Ajoutez l'étiquette de classe et le score à la bounding box
-                    label = f"{class_name}: {confidence:.2f}"
-                    cv2.putText(image_array, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+    #                 # Ajoutez l'étiquette de classe et le score à la bounding box
+    #                 label = f"{class_name}: {confidence:.2f}"
+    #                 cv2.putText(image_array, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-                # Affichez l'image avec les bounding boxes et les annotations
-                st.image(image_array, caption="Image avec détection d'objets", use_column_width=True)
+                # # Affichez l'image avec les bounding boxes et les annotations
+                # st.image(image_array, caption="Image avec détection d'objets", use_column_width=True)
     else:
         st.warning("La détection d'objets sur les vidéos n'est pas prise en charge pour le moment.")
 
